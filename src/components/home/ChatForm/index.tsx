@@ -42,7 +42,7 @@ export default function ChatForm () {
     e.target.reset()
 
     const { error } = await FetchChatGPT(
-      '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',
+      process.env.NEXT_PUBLIC_OPENAI_API_KEY,
       {
         messages: [
           { role: 'user', content: message }
