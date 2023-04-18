@@ -1,12 +1,8 @@
+import type { IGptMessage } from 'types/Gpt'
 import { API_OPENAI_URL } from 'config/consts'
 
-interface IMessage {
-  role: 'assistant' | 'user'
-  content: string
-}
-
 interface ISecondArg {
-  messages: IMessage[]
+  messages: IGptMessage[]
   onChunk: (value: string) => void
 }
 

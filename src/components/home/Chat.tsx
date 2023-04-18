@@ -1,16 +1,30 @@
+'use client'
 import Message from 'components/Message'
+import { useChat } from 'hooks'
 
 export default function Chat () {
+  const { messages, isLoading, isTyping, gptTyping } = useChat()
+
   return (
     <div className="flex flex-col gap-8">
-      <Message
-        from="me"
-        content="Hola klsdjf sdlkfjsd klfjsd klfjsdklf jskldfj sdklfj skldfj klsdf jlskdf jklsdf jklsdfj kljkjkljklsdfkljsdf klsjdfkl sdjflksdfjskldfjsdklfjklsdj"
-      />
-      <Message
-        from="gpt"
-        content="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Pariatur voluptate facere eveniet error in, explicabo, vitae eius omnis quaerat quis veniam. Mollitia amet, odio id ipsum libero voluptatibus labore quaerat!"
-      />
+      {
+        messages.map(({ role, content }, index) => (
+          <Message
+            key={index}
+            from={role === 'assistant' ? 'gpt' : 'me'}
+            content={content}
+          />
+        ))
+      }
+
+      {
+        (isLoading || isTyping) && (
+          <Message
+            from="gpt"
+            content={isLoading ? '...' : gptTyping}
+          />
+        )
+      }
     </div>
   )
 }

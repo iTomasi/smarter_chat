@@ -1,34 +1,68 @@
 'use client'
 import type { FormEvent } from 'react'
+import { useEffect } from 'react'
 import Input from 'components/Input'
 import Button from './Button'
 import { HiCog8Tooth, HiPaperAirplane } from 'react-icons/hi2'
 import { toast } from 'sonner'
 import { FetchChatGPT } from 'services'
+import { useChat } from 'hooks'
 
 export default function ChatForm () {
+  const { isLoading, isTyping, setIsLoading, setIsTyping, setGptTyping, gptTyping, pushMessage } = useChat()
+
+  useEffect(() => {
+    if (
+      isTyping ||
+      (!isTyping && !gptTyping)
+    ) return
+
+    pushMessage({
+      role: 'assistant',
+      content: gptTyping
+    })
+  }, [isTyping])
+
   const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const { message } = Object.fromEntries(new FormData(e.currentTarget)) as { message?: string }
 
-    if (!message) return
+    if (!message || isLoading || isTyping) return
 
-    await FetchChatGPT(
-      '',
+    pushMessage({
+      role: 'user',
+      content: message
+    })
+
+    setIsLoading(true)
+    setGptTyping('')
+
+    // @ts-ignore
+    e.target.reset()
+
+    const { error } = await FetchChatGPT(
+      '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',
       {
         messages: [
           { role: 'user', content: message }
         ],
         onChunk: (value) => {
-          console.log(value)
+          if (!isTyping) {
+            setIsLoading(false)
+            setIsTyping(true)
+          }
+
+          setGptTyping((prev) => prev + value)
         }
       }
     )
 
+    setIsTyping(false)
 
-
-    toast.success('lol')
+    if (error) {
+      toast.error(error)
+    }
   }
 
 
@@ -51,6 +85,7 @@ export default function ChatForm () {
               />
             </button>
           }
+          disabled={isLoading || isTyping}
         />
       </form>
 
