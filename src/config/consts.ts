@@ -1,0 +1,1 @@
+export const API_OPENAI_URL = 'https://api.openai.com/v1/chat/completions'
