@@ -21,7 +21,7 @@ export default function Page () {
         </div>
 
         <div className="w-full">
-          <div className="p-8 max-w-screen-xl mx-auto h-full flex flex-col justify-end gap-8">
+          <div className="p-8 max-w-screen-lg mx-auto h-full flex flex-col justify-end gap-8">
             <Chat/>
             <ChatForm/>
           </div>
