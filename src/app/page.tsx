@@ -10,7 +10,7 @@ export default function Page () {
   return (
     <ChatProvider>
       <div className="flex h-screen">
-        <div className="min-w-[17rem] max-w-[17rem] bg-gray-200 dark:bg-stone-900 border-r border-gray-300 dark:border-stone-700 flex flex-col justify-between">
+        <div className="hidden lg:flex min-w-[17rem] max-w-[17rem] bg-gray-200 dark:bg-stone-900 border-r border-gray-300 dark:border-stone-700 flex-col justify-between">
           <div>
             asdasd
           </div>
