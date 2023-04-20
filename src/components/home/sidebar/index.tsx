@@ -25,7 +25,7 @@ export default function SideBar () {
         className="w-7 h-7"
       />
     </button>
-    <div className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-all lg:relative lg:bg-transparent lg:opacity-100 lg:visible ${show ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+    <div className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-all lg:static lg:bg-transparent lg:opacity-100 lg:visible ${show ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
       <div className={`h-full flex flex-col justify-between min-w-[17rem] max-w-[17rem] bg-gray-200 dark:bg-stone-900 border-r border-gray-300 dark:border-stone-700 transition-all lg:translate-x-0 ${show ? 'translate-x-0' : '-translate-x-full'}`}>
         <div>
           <div className="p-4 border-b border-gray-300 dark:border-stone-700 mb-4 lg:mb-0 lg:hidden">
