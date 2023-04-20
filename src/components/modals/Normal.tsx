@@ -33,7 +33,7 @@ export default function Normal ({
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 grid place-items-center transition-all ${show ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+      className={`fixed inset-0 bg-black bg-opacity-50 grid place-items-center transition-all z-50 ${show ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
       onMouseDown={handleOnMouseDown}
     >
       <div className="w-full p-8 max-h-screen overflow-y-auto">

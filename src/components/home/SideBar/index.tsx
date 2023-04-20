@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { HiBars3, HiXMark } from 'react-icons/hi2'
-import Bottom from './Bottom'
+import Bottom, { ModalSettings } from './Bottom'
+
 
 export default function SideBar () {
   const [show, setShow] = useState<boolean>(false)
+  const [showSettings, setShowSettings] = useState<boolean>(false)
 
   const handleOnClickBars = () => {
     setShow(true)
@@ -12,6 +14,10 @@ export default function SideBar () {
 
   const handleOnClickX = () => {
     setShow(false)
+  }
+
+  const handleOnClickSettings = () => {
+    setShowSettings(true)
   }
 
   return (
@@ -42,9 +48,16 @@ export default function SideBar () {
           <div>asdasdsad</div>
         </div>
 
-        <Bottom/>
+        <Bottom
+          onClickSettings={handleOnClickSettings}
+        />
       </div>
     </div>
+
+    <ModalSettings
+      show={showSettings}
+      setShow={setShowSettings}
+    />
     </>
   )
 }
