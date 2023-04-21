@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { HiBars3, HiXMark } from 'react-icons/hi2'
 import Bottom, { ModalSettings } from './Bottom'
 
-
 export default function SideBar () {
   const [show, setShow] = useState<boolean>(false)
   const [showSettings, setShowSettings] = useState<boolean>(false)
