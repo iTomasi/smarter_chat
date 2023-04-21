@@ -34,5 +34,6 @@ export const metadata: Metadata = {
   title: 'Clone Chat gpt',
   icons: {
     icon: '/favicon.ico'
-  }
+  },
+  viewport: 'width=device-width, initial-scale=1.0'
 }
