@@ -23,7 +23,7 @@ export default function SideBar () {
   return (
     <>
     <button
-      className="fixed top-8 left-8"
+      className="lg:hidden fixed top-5 left-8"
       type="button"
       onClick={handleOnClickBars}
     >

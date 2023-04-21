@@ -1,15 +1,23 @@
 'use client'
 import type { FormEvent } from 'react'
+import type { IGptMessage } from 'types/Gpt'
 import { useEffect } from 'react'
 import Input from 'components/Input'
 import Button from './Button'
 import { HiCog8Tooth, HiPaperAirplane } from 'react-icons/hi2'
 import { toast } from 'sonner'
 import { FetchChatGPT } from 'services'
-import { useChat } from 'hooks'
+import { useChat, useApiKey } from 'hooks'
 
-export default function ChatForm () {
-  const { isLoading, isTyping, setIsLoading, setIsTyping, setGptTyping, gptTyping, pushMessage } = useChat()
+interface Props {
+  className?: string
+}
+
+export default function ChatForm ({
+  className = ''
+}: Props) {
+  const { isLoading, isTyping, setIsLoading, setIsTyping, setGptTyping, gptTyping, pushMessage, messages } = useChat()
+  const { openai } = useApiKey()
 
   useEffect(() => {
     if (
@@ -29,11 +37,17 @@ export default function ChatForm () {
     const { message } = Object.fromEntries(new FormData(e.currentTarget)) as { message?: string }
 
     if (!message || isLoading || isTyping) return
+    else if (!openai) {
+      toast.error('OpenAi Api key is required, click in settings')
+      return
+    }
 
-    pushMessage({
+    const userPayload: IGptMessage = {
       role: 'user',
       content: message
-    })
+    }
+
+    pushMessage(userPayload)
 
     setIsLoading(true)
     setGptTyping('')
@@ -42,10 +56,11 @@ export default function ChatForm () {
     e.target.reset()
 
     const { error } = await FetchChatGPT(
-      process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+      openai,
       {
         messages: [
-          { role: 'user', content: message }
+          ...messages,
+          userPayload
         ],
         onChunk: (value) => {
           if (!isTyping) {
@@ -58,6 +73,7 @@ export default function ChatForm () {
       }
     )
 
+    setIsLoading(false)
     setIsTyping(false)
 
     if (error) {
@@ -67,7 +83,7 @@ export default function ChatForm () {
 
 
   return (
-    <div className="flex gap-4">
+    <div className={`flex gap-4 ${className}`}>
       <form
         className="w-full"
         onSubmit={handleOnSubmit}
