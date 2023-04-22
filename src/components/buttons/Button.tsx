@@ -22,7 +22,7 @@ export default function Button ({
 }: Props) {
   if (type !== 'button' && typeof onClick === 'function') throw new Error(`<Button type="${type}" /> can not use onClick prop only for "button" type`)
 
-  const theClassName = `min-h-[3rem] px-4 rounded-md flex items-center ${colors[color] ?? colors.primary}`
+  const theClassName = `min-h-[2.75rem] px-4 rounded-md flex items-center ${colors[color] ?? colors.primary}`
 
   return (
     <button

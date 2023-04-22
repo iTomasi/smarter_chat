@@ -46,7 +46,9 @@ export default function Modal ({
       <form className="flex flex-col gap-4" onSubmit={handleOnSubmit}>
         <Input
           ref={inputRef}
-          placeholder="OpenAI Api Key"
+          type="password"
+          labelTitle="OpenAI"
+          placeholder="Api Key"
           autoComplete="off"
           name="openai"
         />
