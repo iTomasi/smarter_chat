@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { HiBars3, HiXMark } from 'react-icons/hi2'
+import Top from './Top'
 import Bottom, { ModalSettings } from './Bottom'
 
 export default function SideBar () {
@@ -44,7 +45,7 @@ export default function SideBar () {
             </button>
           </div>
 
-          <div>asdasdsad</div>
+          <Top/>
         </div>
 
         <Bottom
