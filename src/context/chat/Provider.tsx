@@ -69,6 +69,30 @@ export default function Provider ({
     }
   }, [])
 
+  useEffect(() => {
+    if (list.length === 0) return
+
+    const chatId = searchParams.get('chat_id')
+
+    const firstListId = list[0].id
+
+    if (chatId === null) {
+      setId(firstListId)
+      return
+    }
+
+    const numberChatId = Number(chatId)
+
+    if (isNaN(numberChatId)) {
+      setId(firstListId)
+      return
+    }
+
+    const some = list.some((value) => value.id === numberChatId)
+
+    setId(some ? numberChatId : firstListId)
+  }, [list, searchParams])
+
   const pushMessage = (payload: IGptMessage) => {
     dispatchMessages({
       type: gptMessageTypes.push,
