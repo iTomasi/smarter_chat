@@ -25,6 +25,8 @@ export default function ChatForm ({
       (!isTyping && !gptTyping)
     ) return
 
+    setGptTyping('')
+
     pushMessage({
       role: 'assistant',
       content: gptTyping
