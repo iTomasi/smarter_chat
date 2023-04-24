@@ -4,9 +4,14 @@ interface IPayload {
   name: string
 }
 
-const insert = async (payload: IPayload) => {
+interface IReturn {
+  error?: any
+  data?: { id: number, name: string }
+}
+
+const insert = async (payload: IPayload): Promise<IReturn> => {
   try {
-    const db: any = await init('Chat')
+    const db = await init('Chat')
 
     const txn = db.transaction('List', 'readwrite')
     const store = txn.objectStore('List')

@@ -3,9 +3,12 @@ import type { ReactNode } from 'react'
 import type { IGptMessage } from 'types/Gpt'
 import { useState, useReducer, useEffect } from 'react'
 import Context from './Context'
-import { messageReducer } from './reducers'
+import { messageReducer, listReducer } from './reducers'
 import { gptMessageTypes } from 'context/types'
-import { listInsert } from 'services/indexedDB/list'
+import { listInsert, listGetAll } from 'services/indexedDB/list'
+import { toast } from 'sonner'
+import { chatListTypes } from 'context/types'
+import { useSearchParams } from 'next/navigation'
 
 interface Props {
   children: ReactNode
@@ -14,13 +17,36 @@ interface Props {
 export default function Provider ({
   children
 }: Props) {
+  const searchParams = useSearchParams()
   const [messages, dispatchMessages] = useReducer(messageReducer, [])
+  const [list, dispatchList] = useReducer(listReducer, [])
+  const [id, setId] = useState<number>(-1)
   const [gptTyping, setGptTyping] = useState<string>('')
   const [isTyping, setIsTyping] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const request = indexedDB.open('Chat')
+
+    const handleOnSuccess = async () => {
+      const { error, data } = await listGetAll()
+
+      if (error) {
+        toast.error('IndexedDB Error')
+        console.log(error)
+        return
+      }
+
+      dispatchList({
+        type: chatListTypes.change,
+        payload: data
+      })
+    }
+
+    const handleOnError = () => {
+      toast.error('IndexedDB Error')
+      return
+    }
 
     request.addEventListener('upgradeneeded', (e: any) => {
       const db = e.target.result
@@ -33,6 +59,14 @@ export default function Provider ({
 
       listInsert({ name: 'LoLL' })
     })
+
+    request.addEventListener('success', handleOnSuccess)
+    request.addEventListener('error', handleOnError)
+
+    return () => {
+      request.removeEventListener('success', handleOnSuccess)
+      request.removeEventListener('error', handleOnError)
+    }
   }, [])
 
   const pushMessage = (payload: IGptMessage) => {
@@ -42,8 +76,26 @@ export default function Provider ({
     })
   }
 
+  const createNewChat = async () => {
+    const { error, data } = await listInsert({ name: 'New Chat' })
+
+    if (error) {
+      toast.error('IndexedDB Error')
+      console.log(error)
+      return
+    }
+
+    dispatchList({
+      type: chatListTypes.push,
+      payload: data
+    })
+  }
+
   return (
     <Context.Provider value={{
+      id,
+      list,
+      createNewChat,
       messages,
       pushMessage,
       gptTyping,

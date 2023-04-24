@@ -2,7 +2,13 @@
 import type { IGptMessage } from 'types/Gpt'
 import { createContext } from 'react'
 
+export interface IList {
+  id: number
+  name: string
+}
+
 interface IReactState {
+  id: number
   gptTyping: string
   setGptTyping: (value: string | ((prev: string) => string)) => void
   isLoading: boolean
@@ -12,19 +18,24 @@ interface IReactState {
 }
 
 interface IContext extends IReactState {
+  list: IList[]
   messages: IGptMessage[]
   pushMessage: (value: IGptMessage) => void
+  createNewChat: () => Promise<void>
 }
 
 const Context = createContext<IContext>({
+  list: [],
   messages: [],
   pushMessage: () => {},
+  id: -1,
   gptTyping: '',
   setGptTyping: () => {},
   isLoading: false,
   setIsLoading: () => {},
   isTyping: false,
-  setIsTyping: () => {}
+  setIsTyping: () => {},
+  createNewChat: async () => {}
 })
 
 export default Context
