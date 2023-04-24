@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import ToasterSonner from 'components/ToasterSonner'
 import { Inter } from 'next/font/google'
 import { ApiKeyProvider } from 'context/apiKey'
+import { ChatProvider } from 'context/chat'
 import 'tailwindcss/tailwind.css'
 
 interface Props {
@@ -22,7 +23,9 @@ export default function Layout ({
         <ToasterSonner />
         <main>
           <ApiKeyProvider>
-            {children}
+            <ChatProvider>
+              {children}
+            </ChatProvider>
           </ApiKeyProvider>
         </main> 
       </body>

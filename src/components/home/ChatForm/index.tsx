@@ -81,7 +81,6 @@ export default function ChatForm ({
     }
   }
 
-
   return (
     <form
       className={`flex gap-4 ${className}`}
