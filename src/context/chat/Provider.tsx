@@ -9,6 +9,7 @@ import { listInsert, listGetAll } from 'services/indexedDB/list'
 import { toast } from 'sonner'
 import { chatListTypes } from 'context/types'
 import { useSearchParams } from 'next/navigation'
+import { messageInsert, messageGetByListId } from 'services/indexedDB/message'
 
 interface Props {
   children: ReactNode
@@ -26,7 +27,7 @@ export default function Provider ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    const request = indexedDB.open('Chat')
+    const request = indexedDB.open('Chat', 3)
 
     const handleOnSuccess = async () => {
       const { error, data } = await listGetAll()
@@ -55,9 +56,13 @@ export default function Provider ({
         autoIncrement: true
       })
 
+      db.createObjectStore('Message', {
+        autoIncrement: true
+      })
+
       db.close()
 
-      listInsert({ name: 'LoLL' })
+      listInsert({ name: 'New Chat' })
     })
 
     request.addEventListener('success', handleOnSuccess)
@@ -93,11 +98,37 @@ export default function Provider ({
     setId(some ? numberChatId : firstListId)
   }, [list, searchParams])
 
+  useEffect(() => {
+    if (id === -1) return
+
+    messageGetByListId(id)
+      .then(({ error, data }) => {
+        if (error) {
+          console.log(error)
+          toast.error('IndexedDB Error')
+          return
+        }
+
+        dispatchMessages({
+          type: gptMessageTypes.change,
+          payload: data
+        })
+      })
+  }, [id])
+
   const pushMessage = (payload: IGptMessage) => {
     dispatchMessages({
       type: gptMessageTypes.push,
       payload
     })
+
+    messageInsert({
+      list_id: id,
+      ...payload
+    })
+      .then((data) => {
+        console.log(data)
+      })
   }
 
   const createNewChat = async () => {

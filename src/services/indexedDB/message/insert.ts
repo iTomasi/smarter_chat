@@ -1,20 +1,25 @@
 import init from 'services/indexedDB/init'
 
 interface IPayload {
-  name: string
+  role: 'user' | 'assistant',
+  content: string
+  list_id: number
+}
+
+interface IData extends IPayload {
+  id: number
 }
 
 interface IReturn {
   error?: any
-  data?: { id: number, name: string }
+  data?: IData
 }
 
 const insert = async (payload: IPayload): Promise<IReturn> => {
   try {
     const db = await init('Chat')
-
-    const txn = db.transaction('List', 'readwrite')
-    const store = txn.objectStore('List')
+    const txn = db.transaction('Message', 'readwrite')
+    const store = txn.objectStore('Message')
 
     const query = store.put(payload)
 
@@ -27,21 +32,19 @@ const insert = async (payload: IPayload): Promise<IReturn> => {
 
         db.close()
 
-        resolve({
-          data
-        })
+        resolve({ data })
       })
 
       query.addEventListener('error', (e: any) => {
         db.close()
         resolve({ error: e })
-      })  
-    })  
+      })
+    })
   }
 
   catch (e) {
     console.log(e)
-    console.log('insert() error')
+    console.log('insert message error')
     return { error: 'IndexedDB Error' }
   }
 }

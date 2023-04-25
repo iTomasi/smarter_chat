@@ -1,4 +1,5 @@
 export const gptMessageTypes = {
+  change: '@gpt-message_change',
   push: '@gpt-message_add'
 }
 
