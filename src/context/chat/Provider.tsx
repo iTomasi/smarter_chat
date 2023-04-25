@@ -45,7 +45,7 @@ export default function Provider ({
     }
 
     const handleOnError = () => {
-      toast.error('IndexedDB Error')
+      toast.error('Init IndexedDB Error')
       return
     }
 
@@ -60,8 +60,6 @@ export default function Provider ({
 
       try { request.transaction.objectStore('Message') }
       catch { db.createObjectStore('Message', { autoIncrement: true }) }
-
-      db.close()
     })
 
     request.addEventListener('success', handleOnSuccess)
