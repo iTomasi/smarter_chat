@@ -52,17 +52,16 @@ export default function Provider ({
     request.addEventListener('upgradeneeded', (e: any) => {
       const db = e.target.result
 
-      db.createObjectStore('List', {
-        autoIncrement: true
-      })
+      try { request.transaction.objectStore('List') }
+      catch { 
+        db.createObjectStore('List', { autoIncrement: true })
+        listInsert({ name: 'New Chat' })
+      }
 
-      db.createObjectStore('Message', {
-        autoIncrement: true
-      })
+      try { request.transaction.objectStore('Message') }
+      catch { db.createObjectStore('Message', { autoIncrement: true }) }
 
       db.close()
-
-      listInsert({ name: 'New Chat' })
     })
 
     request.addEventListener('success', handleOnSuccess)
