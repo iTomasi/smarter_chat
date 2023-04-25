@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { HiBars3, HiXMark } from 'react-icons/hi2'
 import Top from './Top'
 import Bottom, { ModalSettings } from './Bottom'
+import ModalEditForm, { type IData } from './Top/ChatLinks/ModalEditForm'
 
 export default function SideBar () {
   const [show, setShow] = useState<boolean>(false)
   const [showSettings, setShowSettings] = useState<boolean>(false)
+  const [listData, setListData] = useState<IData | null>(null)
 
   const handleOnClickBars = () => {
     setShow(true)
@@ -18,6 +20,10 @@ export default function SideBar () {
 
   const handleOnClickSettings = () => {
     setShowSettings(true)
+  }
+
+  const handleOnEditList = (value: IData) => {
+    setListData(value)
   }
 
   return (
@@ -45,7 +51,9 @@ export default function SideBar () {
             </button>
           </div>
 
-          <Top/>
+          <Top
+            onEditList={handleOnEditList}
+          />
         </div>
 
         <Bottom
@@ -57,6 +65,11 @@ export default function SideBar () {
     <ModalSettings
       show={showSettings}
       setShow={setShowSettings}
+    />
+
+    <ModalEditForm
+      data={listData}
+      setData={setListData}
     />
     </>
   )

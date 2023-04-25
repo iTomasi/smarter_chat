@@ -5,7 +5,9 @@ export const gptMessageTypes = {
 
 export const chatListTypes = {
   change: '@list-change',
-  push: '@list-push'
+  push: '@list-push',
+  update: '@list-update',
+  remove: '@list-remove'
 }
 
 export const apiKeyTypes = {

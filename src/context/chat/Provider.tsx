@@ -5,7 +5,7 @@ import { useState, useReducer, useEffect } from 'react'
 import Context from './Context'
 import { messageReducer, listReducer } from './reducers'
 import { gptMessageTypes } from 'context/types'
-import { listInsert, listGetAll } from 'services/indexedDB/list'
+import { listInsert, listGetAll, listUpdate, listRemove } from 'services/indexedDB/list'
 import { toast } from 'sonner'
 import { chatListTypes } from 'context/types'
 import { useSearchParams } from 'next/navigation'
@@ -143,6 +143,53 @@ export default function Provider ({
     })
   }
 
+  const updateList = async (theId: number, payload: { name: string }) => {
+    const updated = await listUpdate(theId, payload)
+    
+    if (!updated) return false
+
+    dispatchList({
+      type: chatListTypes.update,
+      payload: {
+        id: theId,
+        ...payload
+      }
+    })
+
+    return true
+  }
+
+  const removeList = async (id: number) => {
+    if (list.length <= 1) return 'Can not remove'
+
+    const removed = await listRemove(id)
+
+    if (!removed) {
+      toast.error('IndexedDB error')
+      return
+    }
+
+    dispatchList({
+      type: chatListTypes.remove,
+      payload: {
+        id
+      }
+    })
+
+    dispatchMessages({
+      type: gptMessageTypes.change,
+      payload: []
+    })
+
+    const find = list.find((value) => value.id !== id)
+
+    if (!find) return 'Wtf?'
+
+    setId(find.id)
+
+    return null
+  }
+
   return (
     <Context.Provider value={{
       id,
@@ -155,7 +202,9 @@ export default function Provider ({
       isTyping,
       setIsTyping,
       isLoading,
-      setIsLoading
+      setIsLoading,
+      updateList,
+      removeList
     }}>
       {children}
     </Context.Provider>

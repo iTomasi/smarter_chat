@@ -10,7 +10,8 @@ interface Props {
 
 const colors = {
   primary: 'bg-fuchsia-500',
-  transparent: 'bg-transparent'
+  transparent: 'bg-transparent',
+  red: 'bg-red-500'
 }
 
 export default function Button ({

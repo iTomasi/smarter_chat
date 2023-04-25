@@ -22,6 +22,8 @@ interface IContext extends IReactState {
   messages: IGptMessage[]
   pushMessage: (value: IGptMessage) => void
   createNewChat: () => Promise<void>
+  updateList: (id: number, payload: { name: string }) => Promise<boolean>
+  removeList: (id: number) => Promise<string | null>
 }
 
 const Context = createContext<IContext>({
@@ -35,7 +37,9 @@ const Context = createContext<IContext>({
   setIsLoading: () => {},
   isTyping: false,
   setIsTyping: () => {},
-  createNewChat: async () => {}
+  createNewChat: async () => {},
+  updateList: async () => false,
+  removeList: async () => null
 })
 
 export default Context
