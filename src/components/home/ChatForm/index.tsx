@@ -57,11 +57,16 @@ export default function ChatForm ({
     // @ts-ignore
     e.target.reset()
 
+    const formatMessages = messages.map((value) => ({
+      role: value.role,
+      content: value.content
+    }))
+
     const { error } = await FetchChatGPT(
       openai,
       {
         messages: [
-          ...messages,
+          ...formatMessages,
           userPayload
         ],
         onChunk: (value) => {
