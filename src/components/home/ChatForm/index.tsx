@@ -92,6 +92,7 @@ export default function ChatForm ({
         placeholder="Write a message"
         name="message"
         disabled={isLoading || isTyping}
+        submitWithEnter={true}
       />
 
       <Button
