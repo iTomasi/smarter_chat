@@ -34,7 +34,7 @@ export default function Layout ({
 }
 
 export const metadata: Metadata = {
-  title: 'Clone Chat gpt',
+  title: 'Smarter Chat',
   icons: {
     icon: '/favicon.ico'
   },
